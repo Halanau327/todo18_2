@@ -7,14 +7,15 @@ import { Navigate } from "react-router-dom"
 import { selectIsLoggedIn } from "../features/auth/model/authSlice"
 import { addTodolistTC } from "../features/todolists/model/todolistsSlice"
 import { Todolists } from "../features/todolists/ui/Todolists/Todolists"
+import { useCreateTodolistMutation } from "../features/todolists/api/todolistsApi"
 
 export const Main = () => {
-  const dispatch = useAppDispatch()
-
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
+  const [createTodolist] = useCreateTodolistMutation()
+
   const addTodolist = (title: string) => {
-    dispatch(addTodolistTC(title))
+    createTodolist(title)
   }
 
   if (!isLoggedIn) {
