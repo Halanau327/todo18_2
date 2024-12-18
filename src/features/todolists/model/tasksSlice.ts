@@ -6,7 +6,7 @@ import { setAppStatus } from "../../../app/appSlice"
 import { RootState } from "../../../app/store"
 import { tasksApi } from "../api/tasksApi"
 import { DomainTask, UpdateTaskDomainModel, UpdateTaskModel } from "../api/tasksApi.types"
-import { addTodolist, removeTodolist } from "./todolistsSlice"
+
 
 export type TasksStateType = {
   [key: string]: DomainTask[]
@@ -39,19 +39,19 @@ export const tasksSlice = createSlice({
         }
       },
     ),
-    clearTasks: create.reducer(() => {
-      return {}
-    }),
+    // clearTasks: create.reducer(() => {
+    //   return {}
+    // }),
   }),
-  extraReducers: (builder) => {
-    builder
-      .addCase(addTodolist, (state, action) => {
-        state[action.payload.todolist.id] = []
-      })
-      .addCase(removeTodolist, (state, action) => {
-        delete state[action.payload.id]
-      })
-  },
+  // extraReducers: (builder) => {
+  //   builder
+  //     // .addCase(addTodolist, (state, action) => {
+  //     //   state[action.payload.todolist.id] = []
+  //     // })
+  //     // .addCase(removeTodolist, (state, action) => {
+  //     //   delete state[action.payload.id]
+  //     // })
+  // },
   selectors: {
     selectTasks: (state) => state,
   },
@@ -142,6 +142,6 @@ export const updateTaskTC =
     }
   }
 
-export const { setTasks, removeTask, addTask, clearTasks, updateTask } = tasksSlice.actions
+export const { setTasks, removeTask, addTask, updateTask } = tasksSlice.actions
 export const { selectTasks } = tasksSlice.selectors
 export const tasksReducer = tasksSlice.reducer
