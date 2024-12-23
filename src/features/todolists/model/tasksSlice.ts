@@ -4,13 +4,16 @@ import { handleServerAppError, handleServerNetworkError } from "common/utils"
 import { Dispatch } from "redux"
 import { setAppStatus } from "../../../app/appSlice"
 import { RootState } from "../../../app/store"
-import { tasksApi } from "../api/tasksApi"
+import { _tasksApi } from "../api/_tasksApi"
 import { DomainTask, UpdateTaskDomainModel, UpdateTaskModel } from "../api/tasksApi.types"
 
 
 export type TasksStateType = {
   [key: string]: DomainTask[]
 }
+
+
+
 
 export const tasksSlice = createSlice({
   name: "tasks",
@@ -39,71 +42,11 @@ export const tasksSlice = createSlice({
         }
       },
     ),
-    // clearTasks: create.reducer(() => {
-    //   return {}
-    // }),
   }),
-  // extraReducers: (builder) => {
-  //   builder
-  //     // .addCase(addTodolist, (state, action) => {
-  //     //   state[action.payload.todolist.id] = []
-  //     // })
-  //     // .addCase(removeTodolist, (state, action) => {
-  //     //   delete state[action.payload.id]
-  //     // })
-  // },
   selectors: {
     selectTasks: (state) => state,
   },
 })
-
-// Thunks
-export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
-  dispatch(setAppStatus({ status: "loading" }))
-  tasksApi
-    .getTasks(todolistId)
-    .then((res) => {
-      dispatch(setAppStatus({ status: "succeeded" }))
-      dispatch(setTasks({ todolistId, tasks: res.data.items }))
-    })
-    .catch((error) => {
-      handleServerNetworkError(error, dispatch)
-    })
-}
-
-export const removeTaskTC = (arg: { taskId: string; todolistId: string }) => (dispatch: Dispatch) => {
-  dispatch(setAppStatus({ status: "loading" }))
-  tasksApi
-    .deleteTask(arg)
-    .then((res) => {
-      if (res.data.resultCode === ResultCode.Success) {
-        dispatch(setAppStatus({ status: "succeeded" }))
-        dispatch(removeTask(arg))
-      } else {
-        handleServerAppError(res.data, dispatch)
-      }
-    })
-    .catch((error) => {
-      handleServerNetworkError(error, dispatch)
-    })
-}
-
-export const addTaskTC = (arg: { title: string; todolistId: string }) => (dispatch: Dispatch) => {
-  dispatch(setAppStatus({ status: "loading" }))
-  tasksApi
-    .createTask(arg)
-    .then((res) => {
-      if (res.data.resultCode === ResultCode.Success) {
-        dispatch(setAppStatus({ status: "succeeded" }))
-        dispatch(addTask({ task: res.data.data.item }))
-      } else {
-        handleServerAppError(res.data, dispatch)
-      }
-    })
-    .catch((error) => {
-      handleServerNetworkError(error, dispatch)
-    })
-}
 
 export const updateTaskTC =
   (arg: { taskId: string; todolistId: string; domainModel: UpdateTaskDomainModel }) =>
@@ -126,7 +69,7 @@ export const updateTaskTC =
       }
 
       dispatch(setAppStatus({ status: "loading" }))
-      tasksApi
+      _tasksApi
         .updateTask({ taskId, todolistId, model })
         .then((res) => {
           if (res.data.resultCode === ResultCode.Success) {
@@ -143,5 +86,4 @@ export const updateTaskTC =
   }
 
 export const { setTasks, removeTask, addTask, updateTask } = tasksSlice.actions
-export const { selectTasks } = tasksSlice.selectors
 export const tasksReducer = tasksSlice.reducer
