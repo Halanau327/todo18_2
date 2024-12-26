@@ -33,11 +33,10 @@ export const Header = () => {
         if (res.data?.resultCode === ResultCode.Success) {
           localStorage.removeItem("sn-token")
           dispatch(setIsLoggedIn({ isLoggedIn: false }))
-          // dispatch(baseApi.util.resetApiState())
         }
       })
       .then(() => {
-        dispatch(baseApi.util.invalidateTags(["Todolist"]))
+        dispatch(baseApi.util.invalidateTags(["Todolist", "Task"]))
       })
   }
 
